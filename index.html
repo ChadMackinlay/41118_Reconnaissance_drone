@@ -168,6 +168,18 @@
             margin-top: 1rem;
         }
 
+        /* small helper for header quicklink buttons */
+        .quicklink-btn {
+            display: inline-block;
+            margin: 0 0.5rem;
+            padding: 0.5rem 0.9rem;
+            background: rgba(255,255,255,0.12);
+            color: white;
+            text-decoration: none;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+
         .result-item {
             background-color: white;
             padding: 1.5rem;
@@ -209,11 +221,23 @@
     </style>
 </head>
 <body>
+    <!--
+        Template header: replace placeholders below with your project info.
+        - Set `PROJECT_TITLE`, `TEAM_NAMES`, `UNIVERSITY`, and `repository-url`.
+        - Use relative links for local files or full URLs for external resources.
+    -->
     <header>
-        <h1>AI in Robotics: Drone RL Control</h1>
+        <h1 id="project-title">[PROJECT_TITLE] — AI in Robotics</h1>
         <div class="header-info">
-            <p><strong>Team Members:</strong> [Names to be added]</p>
-            <p><strong>University:</strong> [University name to be added]</p>
+            <p id="team-names"><strong>Team:</strong> [TEAM_NAMES]</p>
+            <p id="university"><strong>University:</strong> [UNIVERSITY]</p>
+            <div style="margin-top:1rem;">
+                <!-- Replace <repository-url> with your repo (https://github.com/...) -->
+                <a class="quicklink-btn" href="#video">📹 Video</a>
+                <a class="quicklink-btn" href="<repository-url>" target="_blank">💻 Code</a>
+                <a class="quicklink-btn" href="#data">📊 Data</a>
+            </div>
+            <p style="margin-top:0.6rem;font-size:0.9rem;color:rgba(255,255,255,0.9)">[Short tagline or one-line description]</p>
         </div>
     </header>
 
@@ -236,9 +260,27 @@
             <h2>Quick Links</h2>
             <div class="quicklinks">
                 <a href="#video">📹 Video</a>
-                <a href="#code">💻 Code Repository</a>
+                <a href="<repository-url>" target="_blank">💻 Code Repository</a>
                 <a href="#data">📊 Data</a>
+                <a href="#documentation">📚 Documentation</a>
             </div>
+            <!--
+                TODO: Replace <repository-url> with your project's repository URL.
+                You can also link directly to specific folders (e.g. "<repository-url>/tree/main/code").
+            -->
+        </section>
+
+        <!-- Documentation & Figures -->
+        <section id="documentation">
+            <h2>Documentation & Figures</h2>
+            <p>
+                Provide links to code documentation, notebooks, and figures produced during evaluation.
+            </p>
+            <ul style="margin-top:0.8rem; margin-left:1.5rem;">
+                <li><a href="<repository-url>/tree/main/docs" target="_blank">Code documentation / notebooks</a></li>
+                <li><a href="<repository-url>/tree/main/figures" target="_blank">Evaluation figures and plots</a></li>
+            </ul>
+            <p style="margin-top:1rem;">[Add representative figures here — use `<img src="assets/figure1.png">`]</p>
         </section>
 
         <!-- Overview Section -->
@@ -291,8 +333,8 @@
             <h2>Project Video</h2>
             <p>Watch our drone in action:</p>
             <div class="video-container">
-                <!-- Replace with your video URL -->
-                <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" allowfullscreen></iframe>
+                <!-- Replace `data-video-url` with your embed URL (YouTube/Vimeo). Leave `src` empty until set. -->
+                <iframe data-video-url="https://www.youtube.com/embed/VIDEO_ID" src="" allowfullscreen title="Project video"></iframe>
             </div>
             <p style="margin-top: 1rem; font-style: italic; color: #666;">
                 [Replace the video URL with your actual demo video]
@@ -406,5 +448,15 @@
     <footer>
         <p>&copy; 2026 AI in Robotics Project. All rights reserved.</p>
     </footer>
+    <script>
+        // If the iframe has a data-video-url placeholder, copy it into src on load.
+        document.addEventListener('DOMContentLoaded', function () {
+            var f = document.querySelector('iframe[data-video-url]');
+            if (f && (!f.src || f.src === '')) {
+                var url = f.getAttribute('data-video-url');
+                if (url) f.src = url;
+            }
+        });
+    </script>
 </body>
 </html>
