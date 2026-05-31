@@ -227,17 +227,16 @@
         - Use relative links for local files or full URLs for external resources.
     -->
     <header>
-        <h1 id="project-title">[PROJECT_TITLE] — AI in Robotics</h1>
+        <h1 id="project-title">Reconnaissance Drone — AI in Robotics</h1>
         <div class="header-info">
-            <p id="team-names"><strong>Team:</strong> [TEAM_NAMES]</p>
-            <p id="university"><strong>University:</strong> [UNIVERSITY]</p>
+            <p id="team-names"><strong>Team:</strong> Chad Mackinlay, Kade Levert, Thishanth Thirumurugan, Dylan Black</p>
+            <p id="university"><strong>University:</strong> University of Technology Sydney</p>
             <div style="margin-top:1rem;">
-                <!-- Replace <repository-url> with your repo (https://github.com/...) -->
                 <a class="quicklink-btn" href="#video">📹 Video</a>
-                <a class="quicklink-btn" href="<repository-url>" target="_blank">💻 Code</a>
+                <a class="quicklink-btn" href="https://github.com/ChadMackinlay/41118_Reconnaissance_drone/tree/main" target="_blank">💻 Code</a>
                 <a class="quicklink-btn" href="#data">📊 Data</a>
             </div>
-            <p style="margin-top:0.6rem;font-size:0.9rem;color:rgba(255,255,255,0.9)">[Short tagline or one-line description]</p>
+            <p style="margin-top:0.6rem;font-size:0.9rem;color:rgba(255,255,255,0.9)">Finding your Phone</p>
         </div>
     </header>
 
@@ -260,7 +259,7 @@
             <h2>Quick Links</h2>
             <div class="quicklinks">
                 <a href="#video">📹 Video</a>
-                <a href="<repository-url>" target="_blank">💻 Code Repository</a>
+                <a href="https://github.com/ChadMackinlay/41118_Reconnaissance_drone/tree/main" target="_blank">💻 Code Repository</a>
                 <a href="#data">📊 Data</a>
                 <a href="#documentation">📚 Documentation</a>
             </div>
@@ -292,17 +291,12 @@
                 avoid obstacles, and reach multi-goal targets autonomously.
             </p>
             <p style="margin-top: 1rem;">
-                [Add detailed project overview and motivation here]
+                The project integrates a cascaded PID control architecture with a custom Gymnasium environment, allowing us to
+                evaluate the performance of various RL algorithms, including PPO, in complex navigation tasks. Our results
+                demonstrate the potential of RL for real-time drone control and highlight the challenges of sim-to-real transfer.
             </p>
         </section>
 
-        <!-- Abstract Section -->
-        <section id="abstract">
-            <h2>Abstract</h2>
-            <p>
-                [Add your project abstract here. This should be a concise summary of the problem, approach, and results.]
-            </p>
-        </section>
 
         <!-- State Flow Section -->
         <section id="stateflow">
@@ -353,16 +347,34 @@
             <h3>Control Architecture</h3>
             <p>
                 [Explain the cascaded PID controller, tuning parameters, and how it stabilizes the drone]
+
+                The Rl alogirth passes a desired location, within a certain range, to the PID controller. 
+                The PID controller then calculates the necessary thrust and torque to move the drone towards 
+                the desired location. The quadrotor mixer takes these thrust and torque values and converts 
+                them into individual motor commands that control the speed of each rotor, allowing the drone 
+                to maneuver in 3D space.
             </p>
 
             <h3>Physics Simulation</h3>
             <p>
                 [Describe the PyBullet drone model, URDF configuration, and physics parameters]
+
+                The drone is modeled in PyBullet using a URDF file that defines its physical properties, 
+                including mass, inertia, and geometry. The simulation runs at a fixed timestep, allowing 
+                us to accurately model the drone's dynamics and interactions with the environment. We 
+                configured the physics engine to include realistic gravity, drag forces, and collision 
+                detection to ensure that our trained policies can generalize well to real-world scenarios.
             </p>
 
             <h3>Training Approach</h3>
             <p>
                 [Explain the PPO algorithm, training parameters, curriculum learning, and multi-goal strategies]
+
+                We used the Proximal Policy Optimization (PPO) algorithm for training our agents, which is a 
+                popular on-policy RL method known for its stability and efficiency. We implemented a curriculum 
+                learning strategy, starting with simpler tasks and gradually increasing the difficulty by 
+                introducing more complex environments and multi-goal scenarios. This approach helped the agent learn 
+                more effectively and achieve better performance in reaching multiple targets while avoiding obstacles.
             </p>
         </section>
 
@@ -371,18 +383,21 @@
             <h2>Team Members</h2>
             <div class="team-grid">
                 <div class="team-member">
-                    <h4>[Team Member Name]</h4>
-                    <p>[Role/Responsibilities]</p>
+                    <h4>Kade Levert</h4>
+                    <p>Reinforcement Learning Engineer</p>
                 </div>
                 <div class="team-member">
-                    <h4>[Team Member Name]</h4>
-                    <p>[Role/Responsibilities]</p>
+                    <h4>Chad Mackinlay</h4>
+                    <p>Environment Designer</p>
                 </div>
                 <div class="team-member">
-                    <h4>[Team Member Name]</h4>
-                    <p>[Role/Responsibilities]</p>
+                    <h4>Thishanth Thirumurugan</h4>
+                    <p>Control Systems Engineer</p>
                 </div>
-                <!-- Add more team members as needed -->
+                <div class="team-member">
+                    <h4>Dylan Black</h4>
+                    <p>Yolo and Computer Vision Specialist</p>
+                </div>
             </div>
         </section>
 
