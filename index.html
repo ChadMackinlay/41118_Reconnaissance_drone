@@ -274,9 +274,9 @@
         <section id="overview">
             <h2>Project Overview</h2>
             <p>
-                This project focuses on implementing reinforcement learning techniques to control a quadrotor drone
-                in a physics-based simulation environment. Using PyBullet and Gymnasium, we trained agents to navigate,
-                avoid obstacles, and reach multi-goal targets autonomously.
+                This project focuses on implementing reinforcement learning techniques, specifically, Proximal Polic Optimisation and Curriculum Learning, 
+                to control a quadrotor drone in a physics-based simulation environment. 
+                Using PyBullet and Gymnasium, we trained agents to navigate, avoid obstacles, and reach multi-goal targets autonomously.
             </p>
             <p style="margin-top: 1rem;">
                 The project integrates a cascaded PID control architecture with a custom Gymnasium environment, allowing us to
@@ -367,7 +367,7 @@
             <h3>Training Approach</h3>
             <p>
                 We trained the agent using Proximal Policy Optimization (PPO), an on-policy algorithm that balances policy
-                improvement with stability. Training occurs over many episodes, each with generated goals and
+                improvement with stability. Training occurs over many episodes, each with pre-defined goals and
                 environment conditions.
             </p>
             <p>
@@ -421,7 +421,7 @@
             <div class="results-grid">
                 <div class="result-item">
                     <h4>Success Rate</h4>
-                    <p>In simulation, the trained agent is estimated to reach its assigned targets successfully in roughly 65–75% of episodes when obstacles and randomized goals are present. Success tends to be lower on the hardest layouts, where recovery from a large disturbance is more difficult.</p>
+                    <p>In simulation, the trained agent reaches its assigned targets successfully when obstacles and pre-defined goals are present. Curriculum learning played an important role in the agent's training. At the start, the agent was unable to reach a single goal, However, through slowly increasing the complexity of the tasks, the agent was able to reach all three pre-defined goals. Success tends to be lower on the hardest layouts, where recovery from a large disturbance is more difficult.</p>
                 </div>
                 <div class="result-item">
                     <h4>Training Performance</h4>
@@ -450,7 +450,7 @@
             <h3>Key Findings</h3>
             <ul style="margin-top: 0.5rem; margin-left: 1.5rem;">
                 <li>Stable flight is easier to achieve when the RL agent provides high-level setpoints and the PID controller handles attitude control.</li>
-                <li>PPO training is effective, but performance improves slowly when goals are randomized and obstacle density is high.</li>
+                <li>PPO training is effective, but performance improves best through curriculum learning - when tasks become increasingly more difficult.</li>
                 <li>Realistic physics and a fixed timestep make the training environment repeatable and reduce policy brittleness.</li>
             </ul>
             <h3>Limitations</h3>
