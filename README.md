@@ -51,3 +51,8 @@ python scripts/test_model.py --gui --debug --model your_model_name.zip
 ```bash
 python train_drone_multi_goal.py
 ```
+
+### Run the model
+```bash
+python yolo_test.py
+```
