@@ -1,109 +1,53 @@
-# AI in Robotics: PyBullet Drone RL Control
+# AI in Robotics: Reconnaissance Drone
 
-## Project Overview
+## Project 
 
-This project implements reinforcement learning control for simulated quadrotor drones using PyBullet and Gymnasium. It provides a robust simulation environment with cascaded PID controllers for low-level drone dynamics and high-level reinforcement learning interfaces for training agents to navigate, avoid obstacles, and reach multi-goal targets.
+AI in Robotics: PyBullet Drone RL Control
 
-**Key Features:**
-- Gymnasium-style environment for RL training
-- PyBullet physics simulation with accurate drone dynamics
-- Cascaded PID controller for stable flight
-- Support for multi-goal waypoint navigation
-- Obstacle avoidance capabilities
-- Pre-trained PPO models available
+A reinforcement learning project for simulated quadrotor drones using PyBullet and Gymnasium. The repository includes the RL environment, controllers, and evaluation scripts for training and testing drone navigation and obstacle avoidance.
 
-## Group Information
+## Resources
 
-### About Us
+- Repository: `https://github.com/ChadMackinlay/41118_Reconnaissance_drone`
+- Code: `drone_control/`, `scripts/`, `train_drone_multi_goal.py`
+- Dependencies: `requirements.txt`
+- Models and checkpoints: `checkpoints/`, `*.zip`
+- Example scripts: `scripts/check_project.py`, `scripts/random_agent_demo.py`, `scripts/test_model.py`
 
-[To be filled in by the team]
+## Install Info
 
-## Installation
-
-1. Clone this repository:
+1. Clone the repository:
 ```bash
 git clone <repository-url>
 cd AI_In_Robotics-main
 ```
-
 2. Create and activate a conda environment:
 ```bash
 conda create -n drone-rl python=3.9
 conda activate drone-rl
 ```
-
 3. Install dependencies:
 ```bash
 pip install -r requirements.txt
 ```
-
-4. Verify the installation:
+4. Verify installation:
 ```bash
 python scripts/check_project.py
 ```
 
-## Quick Start
+## Run Commands
 
-### Run a Random Policy Demo
+### Run a random policy demo
 ```bash
 python scripts/random_agent_demo.py --gui
 ```
 
-### Test a Trained Model
+### Test a trained model
 ```bash
 python scripts/test_model.py --gui --debug --model your_model_name.zip
 ```
 
-### Train Your Own Model
+### Train a model
 ```bash
 python train_drone_multi_goal.py
 ```
-
-## Main pipeline
-
-```text
-RL action or waypoint target
-    -> CascadedPIDController
-    -> QuadrotorMixer
-    -> Quadrotor.apply_motor_forces()
-    -> PyBullet
-```
-
-## RL action format
-
-```python
-[action_x, action_y, action_z, action_yaw]
-```
-
-Each value should be between `-1.0` and `1.0`.
-
-## Observation format
-
-The environment returns a NumPy array of shape `(16,)`:
-
-```text
-position xyz
-velocity xyz
-roll pitch yaw
-angular velocity xyz
-relative goal xyz
-normalised goal index
-```
-
-## Environment options
-
-- `drone_control/env.py` is the main RL environment.
-- You can disable obstacles by creating the env with `enable_obstacles=False`.
-- You can override goal and obstacle placement with the `goals` and `obstacles` constructor arguments.
-- `scripts/test_model.py` supports `--debug` for additional episode termination logging.
-
-## Important files
-
-- `drone_control/config.py`: physics and environment configuration.
-- `drone_control/pid.py`: PID/cascaded controller.
-- `drone_control/mixer.py`: converts thrust + torque into four motor forces.
-- `drone_control/quadrotor.py`: loads the drone URDF and applies motor forces in PyBullet.
-- `drone_control/env.py`: Gymnasium-style RL environment.
-- `scripts/check_project.py`: smoke test for the RL environment.
-- `scripts/random_agent_demo.py`: random-action environment demo.
-- `scripts/test_model.py`: evaluation runner for a saved PPO model.
