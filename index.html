@@ -276,7 +276,7 @@
             <p>
                 This project focuses on implementing reinforcement learning techniques, specifically, Proximal Policy Optimisation and Curriculum Learning, 
                 to control a quadrotor drone in a physics-based simulation environment. 
-                Using PyBullet and Gymnasium, we trained agents to navigate, avoid obstacles, and reach multi-goal targets autonomously.
+                Using PyBullet and Gymnasium, we trained agents to navigate, avoid obstacles, and reach multi-goal targets autonomously. We also integrated a YOLO-based computer vision pipeline to detect phones in the environment, estimate their approximate positions from camera frames, and generate goal coordinates that are passed to the RL agent.
             </p>
             <p style="margin-top: 1rem;">
                 The project integrates a cascaded PID control architecture with a custom Gymnasium environment, allowing us to
@@ -290,7 +290,7 @@
         <section id="stateflow">
             <h2>State Flow Overview</h2>
             <div class="state-flow">
-                <p><strong>RL Action → PID Controller → Quadrotor Mixer → Physics Simulation</strong></p>
+                <p><strong>Perception (YOLO) → Goal Generation → RL Action → PID Controller → Quadrotor Mixer → Physics Simulation</strong></p>
                 <ul style="margin-top: 1rem; margin-left: 1.5rem;">
                     <li><strong>RL Action:</strong> [-1.0, 1.0] normalized commands for x, y, z, and yaw</li>
                     <li><strong>PID Controller:</strong> Cascaded controller for attitude and position control</li>
@@ -306,7 +306,8 @@
                 <li>Orientation (roll, pitch, yaw)</li>
                 <li>Angular velocity (ωx, ωy, ωz)</li>
                 <li>Relative goal position (Δx, Δy, Δz)</li>
-                <li>Normalized goal index</li>
+                    <li>Normalized goal index</li>
+                    <li>Perceived phone location / derived goal coordinates (from YOLO detections)</li>
             </ul>
         </section>
 
@@ -375,6 +376,13 @@
                 locations and obstacle layouts. This helps the policy learn basic flight control first, then adapt to
                 multi-goal navigation and obstacle avoidance.
             </p>
+            <h3>Perception and Goal Generation</h3>
+            <p>
+                A YOLO-based detector processes camera frames to identify phones and output bounding boxes. We use
+                simple geometric heuristics to approximate the phone's position relative to the drone and convert that
+                estimate into a goal setpoint for the RL policy. This perception-to-goal pipeline runs in the loop with
+                the environment so detected phone locations create dynamic targets for the agent to reach.
+            </p>
         </section>
 
         <!-- Team Section -->
@@ -420,8 +428,12 @@
             <h2>Results</h2>
             <div class="results-grid">
                 <div class="result-item">
+                    <h4>Phone Detection & Goal Integration</h4>
+                    <p>We integrated a YOLO-based detector to identify phones and produce approximate locations that are converted into goal setpoints for the RL agent. In simulation the pipeline reliably produced dynamic goals from detections and the agent was able to navigate to those goals in many test episodes, validating the end-to-end concept.</p>
+                </div>
+                <div class="result-item">
                     <h4>Success Rate</h4>
-                    <p>In simulation, the trained agent reaches its assigned targets successfully when obstacles and pre-defined goals are present. Curriculum learning played an important role in the agent's training. At the start, the agent was unable to reach a single goal, However, through slowly increasing the complexity of the tasks, the agent was able to reach all three pre-defined goals. Success tends to be lower on the hardest layouts, where recovery from a large disturbance is more difficult.</p>
+                    <p>In simulation, the trained agent reaches its assigned targets successfully when obstacles and pre-defined goals are present. Curriculum learning played an important role in the agent's training. At the start, the agent was unable to reach a single goal; however, through slowly increasing task complexity, the agent was able to reach all three pre-defined goals. Success tends to be lower on the hardest layouts, where recovery from a large disturbance is more difficult.</p>
                 </div>
                 <div class="result-item">
                     <h4>Training Performance</h4>
@@ -437,7 +449,7 @@
                 </div>
             </div>
             <p style="margin-top: 1.5rem;">
-                These estimates are conservative and based on the current simulation design. Real results may vary depending on how reward shaping, exploration noise, and environment randomness are tuned during training.
+                Overall, the system completed the core objectives: YOLO-based phone detection produced usable goal locations, and the RL agent learned to navigate to those goals in simulation. Achieving this required many iterations and tuning; it is not perfect and has not been validated in extended or highly varied environments, but it solidly demonstrates the core concept.
             </p>
         </section>
 
@@ -446,6 +458,9 @@
             <h2>Discussion</h2>
             <p>
                 The project shows that combining PPO with a cascaded PID control structure can produce a drone policy that learns navigation tasks reasonably well in simulation. The main strength is the separation between the learned policy and the low-level stabilizing controller, which reduces the burden on the RL algorithm.
+            </p>
+            <p>
+                We also integrated a YOLO-based perception pipeline to detect phones and convert detections into dynamic goal setpoints for the agent. This end-to-end perception-to-goal approach validated the overall concept but introduced localization uncertainty that influenced robustness in some scenarios.
             </p>
             <h3>Key Findings</h3>
             <ul style="margin-top: 0.5rem; margin-left: 1.5rem;">
@@ -463,13 +478,18 @@
         <section id="reflection">
             <h2>Reflection & Future Work</h2>
             <p>
-                This project provided valuable insights into the challenges of applying reinforcement learning to real-time control tasks. We learned that careful design of the reward function and control architecture is crucial for stable learning, and that simulating realistic physics can help produce more robust policies. Our team also gained experience with PyBullet, Gymnasium, and PPO, which are widely used tools in the RL community. Overall, this project has laid a strong foundation for future work in sim-to-real transfer and more complex multi-agent drone systems.
+                Overall, the project completed the targeted objective: integrating YOLO-based phone detection, generating goal locations from detections, and training an RL agent to navigate to those goals in simulation. The pipeline required many iterations of design and tuning to reach this state. It is not flawless and has not been evaluated in long-duration or highly varied real-world settings, but it demonstrates the viability of the perception-to-goal-to-control concept.
+            </p>
+            <h3>Reflection</h3>
+            <p>
+                We would have liked to push the system further to make the perception and policy more robust and versatile. Future work would focus on improving YOLO localization accuracy, integrating more sophisticated sensor fusion for better 3D position estimates, and exposing the agent to longer, more diverse training scenarios to improve generalization and reliability.
             </p>
             <h3>Future Improvements</h3>
             <ul style="margin-top: 0.5rem; margin-left: 1.5rem;">
                 <li>Integrate more realistic sensor models and noise characteristics into the simulation.</li>
-                <li>Explore advanced reinforcement learning algorithms and architectures for improved policy learning.</li>
-                <li>Conduct extensive real-world testing and validation to ensure safety and performance.</li>
+                <li>Improve YOLO-based localization and add sensor fusion (depth or stereo) for more accurate goal estimates.</li>
+                <li>Explore advanced RL algorithms and domain randomization to improve robustness.</li>
+                <li>Conduct extensive real-world testing and longer evaluation runs to validate performance.</li>
             </ul>
         </section>
     </main>
