@@ -9,7 +9,7 @@ A reinforcement learning project for simulated quadrotor drones using PyBullet a
 ## Resources
 
 - Repository: `https://github.com/ChadMackinlay/41118_Reconnaissance_drone`
-- Code: `drone_control/`, `scripts/`, `train_drone_multi_goal.py`
+- Code: `drone_control/`, `scripts/`, `train_drone_multi_goal.py`,  `yolo_test.py`
 - Dependencies: `requirements.txt`
 - Models and checkpoints: `checkpoints/`, `*.zip`
 - Example scripts: `scripts/check_project.py`, `scripts/random_agent_demo.py`, `scripts/test_model.py`
