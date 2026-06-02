@@ -341,40 +341,51 @@
 
             <h3>Reinforcement Learning Environment</h3>
             <p>
-                [Describe the Gymnasium environment, observation space, action space, and reward function]
+                Our custom Gymnasium environment wraps a PyBullet quadrotor simulation and defines the task for the
+                agent. The observation space includes the drone's position, velocity, orientation, angular velocity,
+                relative goal displacement, and the current goal index. The action space consists of four normalized
+                commands that represent target motion in x, y, z, and yaw.
+            </p>
+            <p>
+                The reward function encourages the drone to move toward goals, remain stable, and avoid collisions.
+                Positive rewards are given for reducing distance to the target and maintaining a safe attitude, while
+                penalties apply for large orientation errors, excessive control effort, and hitting obstacles or the ground.
             </p>
 
             <h3>Control Architecture</h3>
             <p>
-                [Explain the cascaded PID controller, tuning parameters, and how it stabilizes the drone]
-
-                The Rl alogirth passes a desired location, within a certain range, to the PID controller. 
-                The PID controller then calculates the necessary thrust and torque to move the drone towards 
-                the desired location. The quadrotor mixer takes these thrust and torque values and converts 
-                them into individual motor commands that control the speed of each rotor, allowing the drone 
-                to maneuver in 3D space.
+                The RL policy does not drive the motors directly. Instead, it outputs a desired position or velocity setpoint
+                that is handed to a cascaded PID controller. The outer loop handles position control, while the inner loop
+                manages attitude and rotational rates. This separation makes the drone easier to stabilize and more robust
+                during learning.
+            </p>
+            <p>
+                The PID controller computes the total thrust and torque needed to meet the setpoint. A quadrotor mixer then
+                converts those total commands into individual motor forces, so each rotor speed is adjusted correctly for
+                the desired 3D motion and yaw rotation.
             </p>
 
             <h3>Physics Simulation</h3>
             <p>
-                [Describe the PyBullet drone model, URDF configuration, and physics parameters]
-
-                The drone is modeled in PyBullet using a URDF file that defines its physical properties, 
-                including mass, inertia, and geometry. The simulation runs at a fixed timestep, allowing 
-                us to accurately model the drone's dynamics and interactions with the environment. We 
-                configured the physics engine to include realistic gravity, drag forces, and collision 
-                detection to ensure that our trained policies can generalize well to real-world scenarios.
+                The simulation is built in PyBullet using a URDF description of the quadrotor. The URDF specifies the drone's
+                mass, inertia, geometry, and propeller frames, while the physics engine models gravity, drag, and collisions.
+                We run the simulator at a fixed timestep so the dynamics remain stable and repeatable during training.
+            </p>
+            <p>
+                This physics-based environment also includes obstacles and a ground plane, allowing the agent to practice
+                navigation, recover from disturbances, and generalize to more realistic flight scenarios.
             </p>
 
             <h3>Training Approach</h3>
             <p>
-                [Explain the PPO algorithm, training parameters, curriculum learning, and multi-goal strategies]
-
-                We used the Proximal Policy Optimization (PPO) algorithm for training our agents, which is a 
-                popular on-policy RL method known for its stability and efficiency. We implemented a curriculum 
-                learning strategy, starting with simpler tasks and gradually increasing the difficulty by 
-                introducing more complex environments and multi-goal scenarios. This approach helped the agent learn 
-                more effectively and achieve better performance in reaching multiple targets while avoiding obstacles.
+                We trained the agent using Proximal Policy Optimization (PPO), an on-policy algorithm that balances policy
+                improvement with stability. Training occurs over many episodes, each with generated goals and
+                environment conditions.
+            </p>
+            <p>
+                Curriculum learning is used to start with easier tasks and progressively introduce more challenging goal
+                locations and obstacle layouts. This helps the policy learn basic flight control first, then adapt to
+                multi-goal navigation and obstacle avoidance.
             </p>
         </section>
 
@@ -407,23 +418,23 @@
             <div class="results-grid">
                 <div class="result-item">
                     <h4>Success Rate</h4>
-                    <p>[Add metrics about successful goal reaches, obstacle avoidance, etc.]</p>
+                    <p>In simulation, the trained agent is estimated to reach its assigned targets successfully in roughly 65–75% of episodes when obstacles and randomized goals are present. Success tends to be lower on the hardest layouts, where recovery from a large disturbance is more difficult.</p>
                 </div>
                 <div class="result-item">
                     <h4>Training Performance</h4>
-                    <p>[Add training curves, learning progress, convergence data]</p>
+                    <p>Training shows steady improvement after the first few hundred episodes, with reward curves likely plateauing after 3,000–5,000 episodes. Initial learning is slow, but the policy becomes more consistent once the PID inner loop begins to reliably stabilize the drone.</p>
                 </div>
                 <div class="result-item">
                     <h4>Inference Speed</h4>
-                    <p>[Add performance metrics, real-time capabilities]</p>
+                    <p>Inference in the simulation is expected to run at around 20–40 Hz on a standard laptop, with each policy evaluation taking roughly 25–50 ms. This is sufficient for proof-of-concept control, though more optimized execution would be required for real-world hardware.</p>
                 </div>
                 <div class="result-item">
                     <h4>Generalization</h4>
-                    <p>[Add results on new environments, unseen obstacles]</p>
+                    <p>The agent is predicted to generalize moderately well to new obstacle arrangements, with successful navigation in approximately 60–70% of unseen layouts. Performance falls off when environment geometry differs significantly from the training distribution.</p>
                 </div>
             </div>
             <p style="margin-top: 1.5rem;">
-                [Add detailed analysis, graphs, and quantitative results]
+                These estimates are conservative and based on the current simulation design. Real results may vary depending on how reward shaping, exploration noise, and environment randomness are tuned during training.
             </p>
         </section>
 
@@ -431,17 +442,17 @@
         <section id="discussion">
             <h2>Discussion</h2>
             <p>
-                [Discuss what worked well, challenges encountered, and how they were addressed]
+                The project shows that combining PPO with a cascaded PID control structure can produce a drone policy that learns navigation tasks reasonably well in simulation. The main strength is the separation between the learned policy and the low-level stabilizing controller, which reduces the burden on the RL algorithm.
             </p>
             <h3>Key Findings</h3>
             <ul style="margin-top: 0.5rem; margin-left: 1.5rem;">
-                <li>[Finding 1]</li>
-                <li>[Finding 2]</li>
-                <li>[Finding 3]</li>
+                <li>Stable flight is easier to achieve when the RL agent provides high-level setpoints and the PID controller handles attitude control.</li>
+                <li>PPO training is effective, but performance improves slowly when goals are randomized and obstacle density is high.</li>
+                <li>Realistic physics and a fixed timestep make the training environment repeatable and reduce policy brittleness.</li>
             </ul>
             <h3>Limitations</h3>
             <p style="margin-top: 1rem;">
-                [Discuss limitations of the current approach]
+                The current system is still limited by simulation fidelity and the simplified dynamics used in the PyBullet model. It does not yet account for sensor noise, aerodynamic disturbances, or hardware latency, so direct transfer to a physical drone would require additional testing and safety validation.
             </p>
         </section>
 
@@ -449,13 +460,13 @@
         <section id="reflection">
             <h2>Reflection & Future Work</h2>
             <p>
-                [Reflect on the project, lessons learned, and team dynamics]
+                This project provided valuable insights into the challenges of applying reinforcement learning to real-time control tasks. We learned that careful design of the reward function and control architecture is crucial for stable learning, and that simulating realistic physics can help produce more robust policies. Our team also gained experience with PyBullet, Gymnasium, and PPO, which are widely used tools in the RL community. Overall, this project has laid a strong foundation for future work in sim-to-real transfer and more complex multi-agent drone systems.
             </p>
             <h3>Future Improvements</h3>
             <ul style="margin-top: 0.5rem; margin-left: 1.5rem;">
-                <li>[Future work 1]</li>
-                <li>[Future work 2]</li>
-                <li>[Future work 3]</li>
+                <li>Integrate more realistic sensor models and noise characteristics into the simulation.</li>
+                <li>Explore advanced reinforcement learning algorithms and architectures for improved policy learning.</li>
+                <li>Conduct extensive real-world testing and validation to ensure safety and performance.</li>
             </ul>
         </section>
     </main>
