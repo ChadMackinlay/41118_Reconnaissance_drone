@@ -1,0 +1,35 @@
+# Virtual environments
+venv/
+.venv/
+
+# Python cache
+__pycache__/
+*.pyc
+
+# YOLO weights
+yolo11n.pt
+
+# YOLO output folders
+runs/
+
+# VSCode local settings
+.vscode/
+
+# Windows junk
+Thumbs.db
+
+__pycache__/
+*.pyc
+events.out.tfevents*
+*.zip
+checkpoints/
+
+__pycache__/
+*.pyc
+
+datasets/phone_dataset/images/
+datasets/phone_dataset/labels/
+
+runs/
+
+yolo26n.pt
