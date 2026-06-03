@@ -293,7 +293,7 @@
             <div class="state-flow">
                 <p><strong>Perception (YOLO) → Goal Generation → RL Action → PID Controller → Quadrotor Mixer → Physics Simulation</strong></p>
                 <ul style="margin-top: 1rem; margin-left: 1.5rem;">
-                    <li><strong>RL Action:</strong> [-1.0, 1.0] normalized commands for x, y, z, and yaw</li>
+                    <li><strong>RL Action:</strong> [-1.0, 1.0] normalised commands for x, y, z, and yaw</li>
                     <li><strong>PID Controller:</strong> Cascaded controller for attitude and position control</li>
                     <li><strong>Quadrotor Mixer:</strong> Converts thrust and torque into motor forces</li>
                     <li><strong>Physics Engine:</strong> PyBullet simulates drone dynamics and environment</li>
@@ -338,7 +338,7 @@
             <p>
                 Our custom Gymnasium environment wraps a PyBullet quadrotor simulation and defines the task for the
                 agent. The observation space includes the drone's position, velocity, orientation, angular velocity,
-                relative goal displacement, and the current goal index. The action space consists of four normalized
+                relative goal displacement, and the current goal index. The action space consists of four normalised
                 commands that represent target motion in x, y, z, and yaw.
             </p>
             <p>
@@ -351,7 +351,7 @@
             <p>
                 The RL policy does not drive the motors directly. Instead, it outputs a desired position or velocity setpoint
                 that is handed to a cascaded PID controller. The outer loop handles position control, while the inner loop
-                manages attitude and rotational rates. This separation makes the drone easier to stabilize and more robust
+                manages attitude and rotational rates. This separation makes the drone easier to stabilise and more robust
                 during learning.
             </p>
             <p>
@@ -368,7 +368,7 @@
             </p>
             <p>
                 This physics-based environment also includes obstacles and a ground plane, allowing the agent to practice
-                navigation, recover from disturbances, and generalize to more realistic flight scenarios.
+                navigation, recover from disturbances, and generalise to more realistic flight scenarios.
             </p>
 
             <h3>Training Approach</h3>
@@ -447,11 +447,11 @@
                 </div>
                 <div class="result-item">
                     <h4>Inference Speed</h4>
-                    <p>Inference in the simulation is expected to run at around 20–40 Hz on a standard laptop, with each policy evaluation taking roughly 25–50 ms. This is sufficient for proof-of-concept control, though more optimized execution would be required for real-world hardware.</p>
+                    <p>Inference in the simulation is expected to run at around 20–40 Hz on a standard laptop, with each policy evaluation taking roughly 25–50 ms. This is sufficient for proof-of-concept control, though more optimised execution would be required for real-world hardware.</p>
                 </div>
                 <div class="result-item">
                     <h4>Generalization</h4>
-                    <p>The agent is predicted to generalize moderately well to new obstacle arrangements, with successful navigation in approximately 60–70% of unseen layouts. Performance falls off when environment geometry differs significantly from the training distribution.</p>
+                    <p>The agent is predicted to generalise moderately well to new obstacle arrangements, with successful navigation in approximately 60–70% of unseen layouts. Performance falls off when environment geometry differs significantly from the training distribution.</p>
                 </div>
             </div>
             <p style="margin-top: 1.5rem;">
@@ -463,10 +463,10 @@
         <section id="discussion">
             <h2>Discussion</h2>
             <p>
-                The project shows that combining PPO with a cascaded PID control structure can produce a drone policy that learns navigation tasks reasonably well in simulation. The main strength is the separation between the learned policy and the low-level stabilizing controller, which reduces the burden on the RL algorithm.
+                The project shows that combining PPO with a cascaded PID control structure can produce a drone policy that learns navigation tasks reasonably well in simulation. The main strength is the separation between the learned policy and the low-level stabilising controller, which reduces the burden on the RL algorithm.
             </p>
             <p>
-                We also integrated a YOLO-based perception pipeline to detect phones and convert detections into dynamic goal setpoints for the agent. This end-to-end perception-to-goal approach validated the overall concept but introduced localization uncertainty that influenced robustness in some scenarios.
+                We also integrated a YOLO-based perception pipeline to detect phones and convert detections into dynamic goal setpoints for the agent. This end-to-end perception-to-goal approach validated the overall concept but introduced localisation uncertainty that influenced robustness in some scenarios.
             </p>
             <h3>Key Findings</h3>
             <ul style="margin-top: 0.5rem; margin-left: 1.5rem;">
@@ -488,13 +488,13 @@
             </p>
             <h3>Reflection</h3>
             <p>
-                We would have liked to push the system further to make the perception and policy more robust and versatile. Future work would focus on improving YOLO localization accuracy, integrating more sophisticated sensor fusion for better 3D position estimates, and exposing the agent to longer, more diverse training scenarios to improve generalization and reliability.
+                We would have liked to push the system further to make the perception and policy more robust and versatile. Future work would focus on improving YOLO localisation accuracy, integrating more sophisticated sensor fusion for better 3D position estimates, and exposing the agent to longer, more diverse training scenarios to improve generalisation and reliability.
             </p>
             <h3>Future Improvements</h3>
             <ul style="margin-top: 0.5rem; margin-left: 1.5rem;">
                 <li>Integrate more realistic sensor models and noise characteristics into the simulation.</li>
-                <li>Improve YOLO-based localization and add sensor fusion (depth or stereo) for more accurate goal estimates.</li>
-                <li>Explore advanced RL algorithms and domain randomization to improve robustness.</li>
+                <li>Improve YOLO-based localisation and add sensor fusion (depth or stereo) for more accurate goal estimates.</li>
+                <li>Explore advanced RL algorithms and domain randomisation to improve robustness.</li>
                 <li>Conduct extensive real-world testing and longer evaluation runs to validate performance.</li>
             </ul>
         </section>
