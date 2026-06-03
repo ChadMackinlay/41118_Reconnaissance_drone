@@ -71,6 +71,27 @@ python scripts/test_model.py --gui --debug --model your_model_name.zip
 python train_drone_multi_goal.py
 ```
 
+### Generate your dataset for YOLO
+```bash
+python generate_yolo_dataset.py
+
+(crtl + C to cancel it when you have sufficient number)
+
+This should create a 'datasets/phone_dataset/' which will contain the generated images and labels
+```
+
+### Then run training for YOLO to use your dataset
+```bash
+yolo detect train model=yolo11n.pt data=datasets/phone_dataset/data.yaml epochs = 50 imgsz = 640
+
+This should generate runs/detect/train/weights/best.pt
+```
+
+### Then run
+```bash
+python yolo_test.py
+```
+
 ## Main pipeline
 
 ```text
