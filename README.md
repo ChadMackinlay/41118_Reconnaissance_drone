@@ -12,11 +12,6 @@ This project implements reinforcement learning control for simulated quadrotor d
 - Obstacle avoidance capabilities
 - Pre-trained PPO models available
 
-## Group Information
-
-### About Us
-
-[To be filled in by the team]
 
 ## Repository
 
